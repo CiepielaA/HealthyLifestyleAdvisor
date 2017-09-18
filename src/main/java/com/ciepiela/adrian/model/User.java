@@ -1,6 +1,7 @@
 package com.ciepiela.adrian.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class User {
@@ -18,6 +19,10 @@ public class User {
 
     @Column(nullable = false)
     private String email;
+
+    @OneToMany
+    @Column(name = "user_id")
+    private List<DiaryDay> diaryDays;
 
     public User() {
     }
@@ -52,5 +57,13 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<DiaryDay> getDiaryDays() {
+        return diaryDays;
+    }
+
+    public void setDiaryDays(List<DiaryDay> diaryDays) {
+        this.diaryDays = diaryDays;
     }
 }

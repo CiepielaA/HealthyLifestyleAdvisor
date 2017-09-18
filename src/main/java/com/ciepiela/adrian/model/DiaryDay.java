@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-public class Day {
+public class DiaryDay {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,7 +19,11 @@ public class Day {
     @Column(name = "day_id")
     private List<Product> products;
 
-    public Day() {}
+    @ManyToOne
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    private User user;
+
+    public DiaryDay() {}
 
     public long getDayId() {
         return dayId;
@@ -43,5 +47,13 @@ public class Day {
 
     public void setProducts(List<Product> products) {
         this.products = products;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
