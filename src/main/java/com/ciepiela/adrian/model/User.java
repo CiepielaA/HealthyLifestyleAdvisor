@@ -14,6 +14,7 @@ public class User {
     @Column(nullable = false)
     private String login;
 
+//    @JsonIgnore
     @Column(nullable = false)
     private String password;
 
@@ -25,6 +26,12 @@ public class User {
     private List<DiaryDay> diaryDays;
 
     public User() {
+    }
+
+    public User(String login, String password, String email) {
+        this.login = login;
+        this.password = password;
+        this.email = email;
     }
 
     public long getUserId() {

@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
 
-public interface DairyDayDAO extends JpaRepository<DiaryDay, Long> {
+public interface DairyDayRepository extends JpaRepository<DiaryDay, Long> {
     DiaryDay findByDateAndUser (LocalDate date, long userId);
 
 }
