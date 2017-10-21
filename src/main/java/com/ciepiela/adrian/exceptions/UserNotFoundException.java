@@ -13,6 +13,7 @@ public class UserNotFoundException extends RuntimeException {
     public UserNotFoundException(long userId) {
         LOGGER.warn("Could not find user with id: {}", userId);
     }
+
     public UserNotFoundException(String userEmail) {
         LOGGER.warn("Could not find user with email: {}", userEmail);
     }
