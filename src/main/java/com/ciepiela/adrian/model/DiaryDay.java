@@ -9,14 +9,14 @@ public class DiaryDay {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "day_id")
-    private long dayId;
+    @Column(name = "diary_day_id")
+    private long diaryDayId;
 
     @Column(nullable = false)
     private LocalDate date;
 
     @OneToMany
-    @Column(name = "day_id")
+    @Column(name = "diary_day_id")
     private List<Product> products;
 
     @ManyToOne
@@ -25,12 +25,12 @@ public class DiaryDay {
 
     public DiaryDay() {}
 
-    public long getDayId() {
-        return dayId;
+    public long getDiaryDayId() {
+        return diaryDayId;
     }
 
-    public void setDayId(long dayId) {
-        this.dayId = dayId;
+    public void setDiaryDayId(long diaryDayId) {
+        this.diaryDayId = diaryDayId;
     }
 
     public LocalDate getDate() {
