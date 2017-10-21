@@ -28,10 +28,10 @@ public class ProductController {
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public ResponseEntity create(@RequestBody Product product) {
-        productRepository.save(product);
+    public ResponseEntity<Product> create(@RequestBody Product product) {
+        Product savedProduct = productRepository.save(product);
         LOGGER.info("Create product with id: {} and description: {}", product.getId(), product.getDescription());
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(savedProduct, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/delete/{productId}", method = RequestMethod.GET)
@@ -43,17 +43,18 @@ public class ProductController {
     }
 
     @RequestMapping(value = "/update/{productId}", method = RequestMethod.POST)
-    public ResponseEntity update(@RequestBody Product updatedProduct, @PathVariable long productId) {
+    public ResponseEntity<Product> update(@RequestBody Product updatedProduct, @PathVariable long productId) {
         findIfProductExist(productId);
-        Product product = productRepository.getOne(productId);
-        product.setDescription(updatedProduct.getDescription());
-        product.setKcal(updatedProduct.getKcal());
-        product.setProtein(updatedProduct.getProtein());
-        product.setFat(updatedProduct.getFat());
-        product.setCarbs(updatedProduct.getCarbs());
-        productRepository.save(product);
-        LOGGER.info("Create product with id: {} and description: {}", product.getId(), product.getDescription());
-        return new ResponseEntity(HttpStatus.OK);
+        Product exisitingProduct = productRepository.getOne(productId);
+        exisitingProduct.setDescription(updatedProduct.getDescription());
+        exisitingProduct.setKcal(updatedProduct.getKcal());
+        exisitingProduct.setProtein(updatedProduct.getProtein());
+        exisitingProduct.setFat(updatedProduct.getFat());
+        exisitingProduct.setCarbs(updatedProduct.getCarbs());
+        exisitingProduct.setAlcohol(updatedProduct.getAlcohol());
+        Product savedProduct = productRepository.save(exisitingProduct);
+        LOGGER.info("Create product with id: {} and description: {}", exisitingProduct.getId(), exisitingProduct.getDescription());
+        return new ResponseEntity<>(savedProduct, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/findById/{productId}", method = RequestMethod.GET)
@@ -68,7 +69,7 @@ public class ProductController {
     }
 
     @RequestMapping(value = "/findByDescription/{description}", method = RequestMethod.GET)
-    public ResponseEntity<Product> findByEmail(@PathVariable String description) {
+    public ResponseEntity<Product> findByDescription(@PathVariable String description) {
         Optional<Product> product = productRepository.findByDescription(description);
         if (product.isPresent()) {
             LOGGER.info("Found product with description: {} ", description);
