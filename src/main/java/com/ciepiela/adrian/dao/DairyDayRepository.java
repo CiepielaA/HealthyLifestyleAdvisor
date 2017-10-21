@@ -7,5 +7,4 @@ import java.time.LocalDate;
 
 public interface DairyDayRepository extends JpaRepository<DiaryDay, Long> {
     DiaryDay findByDateAndUser (LocalDate date, long userId);
-
 }

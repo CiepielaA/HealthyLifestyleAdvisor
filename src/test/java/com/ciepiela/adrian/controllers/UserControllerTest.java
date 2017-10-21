@@ -3,6 +3,8 @@ package com.ciepiela.adrian.controllers;
 import com.ciepiela.adrian.HealthyLifestyleAdvisorApplication;
 import com.ciepiela.adrian.dao.UserRepository;
 import com.ciepiela.adrian.model.User;
+import org.hamcrest.Matchers;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,18 +26,18 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 
-import static org.junit.Assert.assertNotNull;
-
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = HealthyLifestyleAdvisorApplication.class)
 @WebAppConfiguration
 public class UserControllerTest {
 
-    private static final long USER_ID = 1;
-    private static final long USER_ID_FOR_DELETE_TEST = 2;
     private static final String USER_LOGIN = "login";
     private static final String USER_PASSWORD = "password";
     private static final String USER_EMAIL = "email";
+    private static final String NO_EXISTING_USER_EMAIL = "xxx";
+    private static final String INVALID_JSON_USER = "xxx";
+    private static int userId = 0;  //type int because of conversion types between mysql and java
+    private static int noExistingUserId = 666;  //type int because of conversion types between mysql and java
     private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(),
             Charset.forName("utf8"));
@@ -54,18 +56,16 @@ public class UserControllerTest {
                 .filter(hmc -> hmc instanceof MappingJackson2HttpMessageConverter)
                 .findAny()
                 .orElse(null);
-        assertNotNull("the JSON message converter must not be null",
+        Assert.assertNotNull("the JSON message converter must not be null",
                 this.mappingJackson2HttpMessageConverter);
     }
 
     @Before
-    public void setup() throws Exception {
+    public void setUp() throws Exception {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-
         this.userRepository.deleteAllInBatch();
-
         this.user = userRepository.save(new User(USER_LOGIN, USER_PASSWORD, USER_EMAIL));
-        this.userRepository.save(user);
+        userId++;
     }
 
     @Test
@@ -77,23 +77,73 @@ public class UserControllerTest {
     }
 
     @Test
+    public void badRequestStatusWhenTryingToCreateUserFromInvalidData() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/user/create")
+                .content(convertToJson(INVALID_JSON_USER))
+                .contentType(contentType))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
     public void delete() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/user/delete" + "/" + USER_ID_FOR_DELETE_TEST))
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/delete" + "/" + userId))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
+    public void NotFoundStatusWhenTryingToDeleteNonExistingUser() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/delete" + "/" + noExistingUserId))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
     public void update() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/user/update" + "/" + USER_ID)
+        mockMvc.perform(MockMvcRequestBuilders.post("/user/update" + "/" + userId)
                 .content(convertToJson(user))
                 .contentType(contentType))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
+    public void NotFoundStatusWhenTryingToUpdateNonExistingUser() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/user/update" + "/" + noExistingUserId)
+                .content(convertToJson(user))
+                .contentType(contentType))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
     public void findById() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/user/findById" + "/" + 1))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/findById" + "/" + userId))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(contentType))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.userId", Matchers.is(userId)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.login", Matchers.is(USER_LOGIN)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.password", Matchers.is(USER_PASSWORD)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.email", Matchers.is(USER_EMAIL)));
+    }
+
+    @Test
+    public void userNotFoundById() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/findById" + "/" + noExistingUserId))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    public void findByEmail() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/findByEmail" + "/" + USER_EMAIL))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(contentType))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.userId", Matchers.is(userId)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.login", Matchers.is(USER_LOGIN)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.password", Matchers.is(USER_PASSWORD)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.email", Matchers.is(USER_EMAIL)));
+    }
+
+    @Test
+    public void userNotFoundByEmail() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/findByEmail" + "/" + NO_EXISTING_USER_EMAIL))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
     private String convertToJson(Object o) throws IOException {

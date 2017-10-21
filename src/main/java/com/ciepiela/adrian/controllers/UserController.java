@@ -1,6 +1,7 @@
 package com.ciepiela.adrian.controllers;
 
 import com.ciepiela.adrian.dao.UserRepository;
+import com.ciepiela.adrian.exceptions.UserNotFoundException;
 import com.ciepiela.adrian.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,36 +28,56 @@ public class UserController {
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public ResponseEntity create(@RequestBody User user){
+    public ResponseEntity create(@RequestBody User user) {
         userRepository.save(user);
         LOGGER.info("Create user with login: {} and e-mail: {}", user.getLogin(), user.getEmail());
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/delete/{userId}", method = RequestMethod.GET)
-    public ResponseEntity delete(@PathVariable long userId){
+    public ResponseEntity delete(@PathVariable long userId) {
+        findIfUserExist(userId);
         userRepository.delete(userId);
         LOGGER.info("Delete user with id {}", userId);
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/update/{userId}", method = RequestMethod.POST)
-    public ResponseEntity update(@RequestBody User updatedUser){
-        User user = userRepository.getOne(updatedUser.getUserId());
+    public ResponseEntity update(@RequestBody User updatedUser, @PathVariable long userId) {
+        findIfUserExist(userId);
+        User user = userRepository.getOne(userId);
         user.setEmail(updatedUser.getEmail());
         user.setLogin(updatedUser.getLogin());
         user.setPassword(updatedUser.getPassword());
         userRepository.save(user);
-        LOGGER.info("Update user with id {}", user.getUserId());
+        LOGGER.info("Update user with id {}", userId);
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/findByEmail/{email}", method = RequestMethod.GET)
+    public ResponseEntity<User> findByEmail(@PathVariable String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isPresent()) {
+            LOGGER.info("Found user with email: {} ", email);
+            return new ResponseEntity<>(user.get(), HttpStatus.OK);
+        } else {
+            throw new UserNotFoundException(email);
+        }
     }
 
     @RequestMapping(value = "/findById/{userId}", method = RequestMethod.GET)
-    public ResponseEntity findById(@PathVariable long userId){
+    public ResponseEntity<User> findById(@PathVariable long userId) {
         Optional<User> user = userRepository.findByUserId(userId);
-//        user.ifPresent(u -> LOGGER.info("Found user with id: {} ", userId))
-        return new ResponseEntity(HttpStatus.OK);
+        if (user.isPresent()) {
+            LOGGER.info("Found user with id: {} ", userId);
+            return new ResponseEntity<>(user.get(), HttpStatus.OK);
+        } else {
+            throw new UserNotFoundException(userId);
+        }
     }
 
+    private void findIfUserExist(long userId) {
+        userRepository.findByUserId(userId).orElseThrow(() -> new UserNotFoundException(userId));
+    }
 
 }
