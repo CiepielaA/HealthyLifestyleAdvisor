@@ -25,7 +25,8 @@ public class User {
     @Column(name = "user_id")
     private List<DiaryDay> diaryDays;
 
-    public User() {
+    //for jpa only
+    private User() {
     }
 
     public User(String login, String password, String email) {

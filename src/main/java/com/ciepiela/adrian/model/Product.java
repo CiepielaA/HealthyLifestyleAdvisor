@@ -12,21 +12,50 @@ public class Product {
 
     @Column(nullable = false)
     private String description;
-
-    @Column(nullable = false)
     private int kcal;
-
-    @Column(nullable = false)
     private int protein;
-
-    @Column(nullable = false)
     private int fat;
-
-    @Column(nullable = false)
     private int carbs;
+    private int alcohol;
 
-    public Product() {
+    //for jpa only
+    private Product() {
     }
+
+    public Product(String description, int kcal) {
+        this(description, kcal, 0, 0, 0, 0);
+    }
+
+    public Product(String description, int protein, int fat, int carbs) {
+        this(description, protein, fat, carbs, 0);
+    }
+
+    public Product(String description, int protein, int fat, int carbs, int alcohol) {
+        this(description, 4*protein + 9*fat + 4*carbs, protein, fat, carbs, alcohol);
+    }
+
+    private Product(String description, int kcal, int protein, int fat, int carbs, int alcohol) {
+        this.description = description;
+        this.kcal = kcal;
+        this.protein = protein;
+        this.fat = fat;
+        this.carbs = carbs;
+        this.alcohol = alcohol;
+    }
+
+//    public static Product createProductWithKcal(String description, int kcal){
+//        return new Product(description, kcal, 0, 0, 0, 0);
+//    }
+//
+//    public static Product createProductWithMacronutrients(String description, int protein, int fat, int carbs) {
+//        int kcal = calculateAmountOfKcal(protein, fat, carbs);
+//        return new Product(description, kcal, protein, fat, carbs,  0);
+//    }
+//
+//    public static Product createProductWithAlcohol(String description, int protein, int fat, int carbs, int alcohol) {
+//        int kcal = calculateAmountOfKcal(protein, fat, carbs, alcohol);
+//        return new Product(description, kcal, protein, fat, carbs,  alcohol);
+//    }
 
     public long getId() {
         return productId;
@@ -75,5 +104,21 @@ public class Product {
     public void setCarbs(int carbs) {
         this.carbs = carbs;
     }
+
+    public int getAlcohol() {
+        return alcohol;
+    }
+
+    public void setAlcohol(int alcohol) {
+        this.alcohol = alcohol;
+    }
+
+//    private int calculateAmountOfKcal(int protein, int fat, int carbs) {
+//        return 4*protein + 9*fat + 4*carbs;
+//    }
+//
+//    private int calculateAmountOfKcal(int protein, int fat, int carbs, int alcohol) {
+//        return 4*protein + 9*fat + 4*carbs + 7*alcohol;
+//    }
 }
 

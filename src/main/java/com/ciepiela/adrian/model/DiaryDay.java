@@ -23,7 +23,8 @@ public class DiaryDay {
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User user;
 
-    public DiaryDay() {}
+    //for jpa only
+    private DiaryDay() {}
 
     public long getDiaryDayId() {
         return diaryDayId;
