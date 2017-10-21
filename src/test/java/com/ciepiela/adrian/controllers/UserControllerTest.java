@@ -103,7 +103,7 @@ public class UserControllerTest {
 
     @Test
     public void update() throws Exception {
-        User updatedUser = new User("updatedLogin", "updatedPassword", "updatedEmail");
+        User updatedUser = new User("updated login", "updated password", "updated email");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/user/update" + "/" + userId)
                 .content(convertToJson(updatedUser))
@@ -111,9 +111,9 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(contentType))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.userId", Matchers.is(userId)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.login", Matchers.is("updatedLogin")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.password", Matchers.is("updatedPassword")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.email", Matchers.is("updatedEmail")));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.login", Matchers.is(updatedUser.getLogin())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.password", Matchers.is(updatedUser.getPassword())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.email", Matchers.is(updatedUser.getEmail())));
     }
 
     @Test
