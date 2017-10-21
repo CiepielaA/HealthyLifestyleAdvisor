@@ -73,7 +73,12 @@ public class UserControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/user/create")
                 .content(convertToJson(user))
                 .contentType(contentType))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(contentType))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.userId", Matchers.is(userId)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.login", Matchers.is(USER_LOGIN)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.password", Matchers.is(USER_PASSWORD)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.email", Matchers.is(USER_EMAIL)));
     }
 
     @Test
@@ -98,10 +103,17 @@ public class UserControllerTest {
 
     @Test
     public void update() throws Exception {
+        User updatedUser = new User("updatedLogin", "updatedPassword", "updatedEmail");
+
         mockMvc.perform(MockMvcRequestBuilders.post("/user/update" + "/" + userId)
-                .content(convertToJson(user))
+                .content(convertToJson(updatedUser))
                 .contentType(contentType))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(contentType))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.userId", Matchers.is(userId)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.login", Matchers.is("updatedLogin")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.password", Matchers.is("updatedPassword")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.email", Matchers.is("updatedEmail")));
     }
 
     @Test

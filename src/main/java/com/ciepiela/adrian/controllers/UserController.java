@@ -28,10 +28,10 @@ public class UserController {
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public ResponseEntity create(@RequestBody User user) {
-        userRepository.save(user);
+    public ResponseEntity<User> create(@RequestBody User user) {
+        User savedUser = userRepository.save(user);
         LOGGER.info("Create user with login: {} and e-mail: {}", user.getLogin(), user.getEmail());
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(savedUser, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/delete/{userId}", method = RequestMethod.GET)
@@ -43,15 +43,15 @@ public class UserController {
     }
 
     @RequestMapping(value = "/update/{userId}", method = RequestMethod.POST)
-    public ResponseEntity update(@RequestBody User updatedUser, @PathVariable long userId) {
+    public ResponseEntity<User> update(@RequestBody User updatedUser, @PathVariable long userId) {
         findIfUserExist(userId);
-        User user = userRepository.getOne(userId);
-        user.setEmail(updatedUser.getEmail());
-        user.setLogin(updatedUser.getLogin());
-        user.setPassword(updatedUser.getPassword());
-        userRepository.save(user);
+        User existingUser = userRepository.getOne(userId);
+        existingUser.setEmail(updatedUser.getEmail());
+        existingUser.setLogin(updatedUser.getLogin());
+        existingUser.setPassword(updatedUser.getPassword());
+        User savedUser = userRepository.save(existingUser);
         LOGGER.info("Update user with id {}", userId);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(savedUser, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/findByEmail/{email}", method = RequestMethod.GET)
