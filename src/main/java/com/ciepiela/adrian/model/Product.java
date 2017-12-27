@@ -1,5 +1,7 @@
 package com.ciepiela.adrian.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,6 +10,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
+    @JsonProperty("productId")
     private long productId;
 
     @Column(nullable = false)
