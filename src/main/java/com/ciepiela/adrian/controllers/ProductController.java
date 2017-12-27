@@ -53,7 +53,7 @@ public class ProductController {
         exisitingProduct.setCarbs(updatedProduct.getCarbs());
         exisitingProduct.setAlcohol(updatedProduct.getAlcohol());
         Product savedProduct = productRepository.save(exisitingProduct);
-        LOGGER.info("Create product with id: {} and description: {}", exisitingProduct.getId(), exisitingProduct.getDescription());
+        LOGGER.info("Update product with id: {} and description: {}", exisitingProduct.getId(), exisitingProduct.getDescription());
         return new ResponseEntity<>(savedProduct, HttpStatus.OK);
     }
 

@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class HealthyLifestyleAdvisorApplication {
 
 //    @Autowired
-//	DairyDayRepository dairyDayDAO;
+//	DiaryDayRepository dairyDayDAO;
 //
 //    @Autowired
 //    ProductRepository productDAO;
