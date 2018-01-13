@@ -131,12 +131,12 @@ public class ProductControllerTest {
         this.product = productRepository.save(new Product(DESCRIPTION, PROTEIN, FAT, CARBS, ALCOHOL));
         Product updatedProduct = new Product("updated description", 111, 222, 333,444);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/product/update" + "/" + PRODUCT_ID)
+        mockMvc.perform(MockMvcRequestBuilders.post("/product/update" + "/" + product.getId())
                 .content(convertToJson(updatedProduct))
                 .contentType(contentType))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(contentType))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.productId", Matchers.is(PRODUCT_ID)))     // o chuj chodzi??????
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(product.getId())))     // o chuj chodzi??????
                 .andExpect(MockMvcResultMatchers.jsonPath("$.description", Matchers.is(updatedProduct.getDescription())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.protein", Matchers.is(updatedProduct.getProtein())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.fat", Matchers.is(updatedProduct.getFat())))

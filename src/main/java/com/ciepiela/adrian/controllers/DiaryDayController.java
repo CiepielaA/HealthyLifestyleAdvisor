@@ -15,7 +15,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/dairyDay")
+@RequestMapping(value = "/diaryDay")
 @EnableWebMvc
 public class DiaryDayController {
 
@@ -64,13 +64,14 @@ public class DiaryDayController {
     }
 
     @RequestMapping(value = "/findByDateAndUserId/{date}/{userId}", method = RequestMethod.GET)
-    public ResponseEntity<DiaryDay> findByDateAndUserId(@PathVariable LocalDate date, @PathVariable long userId) {
-        Optional<DiaryDay> diaryDay = diaryDayRepository.findByDateAndUser_UserId(date, userId);
+    public ResponseEntity<DiaryDay> findByDateAndUserId(@PathVariable String date, @PathVariable long userId) {
+        LocalDate formattedDate = LocalDate.parse(date);
+        Optional<DiaryDay> diaryDay = diaryDayRepository.findByDateAndUser_UserId(formattedDate, userId);
         if (diaryDay.isPresent()) {
             LOGGER.info("Found diaryDay with id: {} ", diaryDay.get().getDiaryDayId());
             return new ResponseEntity<>(diaryDay.get(), HttpStatus.OK);
         } else {
-            throw new DiaryDayNotFoundException(date, userId);
+            throw new DiaryDayNotFoundException(formattedDate, userId);
         }
     }
 

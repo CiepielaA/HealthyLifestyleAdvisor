@@ -1,7 +1,5 @@
 package com.ciepiela.adrian.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import javax.persistence.*;
 
 @Entity
@@ -10,7 +8,6 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
-    @JsonProperty("productId")
     private long productId;
 
     @Column(nullable = false)
@@ -46,26 +43,8 @@ public class Product {
         this.alcohol = alcohol;
     }
 
-//    public static Product createProductWithKcal(String description, int kcal){
-//        return new Product(description, kcal, 0, 0, 0, 0);
-//    }
-//
-//    public static Product createProductWithMacronutrients(String description, int protein, int fat, int carbs) {
-//        int kcal = calculateAmountOfKcal(protein, fat, carbs);
-//        return new Product(description, kcal, protein, fat, carbs,  0);
-//    }
-//
-//    public static Product createProductWithAlcohol(String description, int protein, int fat, int carbs, int alcohol) {
-//        int kcal = calculateAmountOfKcal(protein, fat, carbs, alcohol);
-//        return new Product(description, kcal, protein, fat, carbs,  alcohol);
-//    }
-
     public long getId() {
         return productId;
-    }
-
-    public void setId(long id) {
-        this.productId = id;
     }
 
     public String getDescription() {
@@ -116,12 +95,17 @@ public class Product {
         this.alcohol = alcohol;
     }
 
-//    private int calculateAmountOfKcal(int protein, int fat, int carbs) {
-//        return 4*protein + 9*fat + 4*carbs;
-//    }
-//
-//    private int calculateAmountOfKcal(int protein, int fat, int carbs, int alcohol) {
-//        return 4*protein + 9*fat + 4*carbs + 7*alcohol;
-//    }
+    @Override
+    public String toString() {
+        return "{" +
+                "description=" + description +
+                ", kcal=" + kcal +
+                ", protein=" + protein +
+                ", fat=" + fat +
+                ", carbs=" + carbs +
+                ", alcohol=" + alcohol +
+                ", id=" + productId +
+                '}';
+    }
 }
 

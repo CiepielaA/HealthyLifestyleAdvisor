@@ -49,6 +49,7 @@ public class UserController {
         existingUser.setEmail(updatedUser.getEmail());
         existingUser.setLogin(updatedUser.getLogin());
         existingUser.setPassword(updatedUser.getPassword());
+        existingUser.setDiaryDays(updatedUser.getDiaryDays());
         User savedUser = userRepository.save(existingUser);
         LOGGER.info("Update user with id {}", userId);
         return new ResponseEntity<>(savedUser, HttpStatus.OK);

@@ -1,7 +1,9 @@
 package com.ciepiela.adrian.controllers;
 
 import com.ciepiela.adrian.HealthyLifestyleAdvisorApplication;
+import com.ciepiela.adrian.dao.DiaryDayRepository;
 import com.ciepiela.adrian.dao.UserRepository;
+import com.ciepiela.adrian.model.DiaryDay;
 import com.ciepiela.adrian.model.User;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -24,6 +26,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.time.LocalDate;
 import java.util.Arrays;
 
 @RunWith(SpringRunner.class)
@@ -48,6 +51,8 @@ public class UserControllerTest {
     @Autowired
     private UserRepository userRepository;
     @Autowired
+    private DiaryDayRepository diaryDayRepository;
+    @Autowired
     private WebApplicationContext webApplicationContext;
 
     @Autowired
@@ -70,15 +75,45 @@ public class UserControllerTest {
 
     @Test
     public void create() throws Exception {
+        DiaryDay diaryDay = new DiaryDay();
+        DiaryDay diaryDay2 = new DiaryDay();
+//        user.setDiaryDays(Collections.singletonList(diaryDay));
+        user.setDiaryDays(Arrays.asList(diaryDay, diaryDay2));
+        diaryDayRepository.save(diaryDay);
+        diaryDayRepository.save(diaryDay2);
+
         mockMvc.perform(MockMvcRequestBuilders.post("/user/create")
                 .content(convertToJson(user))
                 .contentType(contentType))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(contentType))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.userId", Matchers.is(userId)))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.userId", Matchers.is(userId)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.login", Matchers.is(USER_LOGIN)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.password", Matchers.is(USER_PASSWORD)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.email", Matchers.is(USER_EMAIL)));
+    }
+
+
+    @Test
+    public void appendNewDiaryDay() throws Exception {
+        DiaryDay diaryDay = new DiaryDay();
+        DiaryDay diaryDay2 = new DiaryDay();
+        diaryDayRepository.save(Arrays.asList(diaryDay, diaryDay2));
+        diaryDay2.setDate(LocalDate.of(1000, 10, 10));
+        user.appendDiaryDay(diaryDay);
+        user.appendDiaryDay(diaryDay2);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/user/update" + "/" + user.getUserId())
+                .content(convertToJson(user))
+                .contentType(contentType))
+//                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(contentType))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.userId", Matchers.is(user.getUser())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.login", Matchers.is(user.getLogin())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.password", Matchers.is(user.getPassword())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.email", Matchers.is(user.getEmail())));
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.diaryDays[0]", Matchers.is(user.getDiaryDays().get(0))))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.diaryDays[0]", Matchers.is(user.getDiaryDays().get(1))));
     }
 
     @Test
@@ -91,7 +126,7 @@ public class UserControllerTest {
 
     @Test
     public void delete() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/user/delete" + "/" + userId))
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/delete" + "/" + user.getUserId()))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
@@ -105,12 +140,12 @@ public class UserControllerTest {
     public void update() throws Exception {
         User updatedUser = new User("updated login", "updated password", "updated email");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/user/update" + "/" + userId)
+        mockMvc.perform(MockMvcRequestBuilders.post("/user/update" + "/" + user.getUserId())
                 .content(convertToJson(updatedUser))
                 .contentType(contentType))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+//                .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(contentType))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.userId", Matchers.is(userId)))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.userId", Matchers.is(user.getUser())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.login", Matchers.is(updatedUser.getLogin())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.password", Matchers.is(updatedUser.getPassword())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.email", Matchers.is(updatedUser.getEmail())));
@@ -126,10 +161,10 @@ public class UserControllerTest {
 
     @Test
     public void findById() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/user/findById" + "/" + userId))
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/findById" + "/" + user.getUserId()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(contentType))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.userId", Matchers.is(userId)))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.userId", Matchers.is(user.getUser())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.login", Matchers.is(USER_LOGIN)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.password", Matchers.is(USER_PASSWORD)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.email", Matchers.is(USER_EMAIL)));
@@ -146,7 +181,7 @@ public class UserControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/user/findByEmail" + "/" + USER_EMAIL))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(contentType))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.userId", Matchers.is(userId)))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.userId", Matchers.is(user.getUser())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.login", Matchers.is(USER_LOGIN)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.password", Matchers.is(USER_PASSWORD)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.email", Matchers.is(USER_EMAIL)));

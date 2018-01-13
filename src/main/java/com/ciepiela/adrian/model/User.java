@@ -1,6 +1,7 @@
 package com.ciepiela.adrian.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,21 +28,20 @@ public class User {
 
     //for jpa only
     private User() {
+        this.diaryDays = new ArrayList<>();
     }
 
     public User(String login, String password, String email) {
         this.login = login;
         this.password = password;
         this.email = email;
+        this.diaryDays = new ArrayList<>();
     }
 
     public long getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
     public String getLogin() {
         return login;
     }
@@ -73,4 +73,10 @@ public class User {
     public void setDiaryDays(List<DiaryDay> diaryDays) {
         this.diaryDays = diaryDays;
     }
+
+    public void appendDiaryDay(DiaryDay diaryDay) {
+        this.diaryDays.add(diaryDay);
+    }
+
+
 }
