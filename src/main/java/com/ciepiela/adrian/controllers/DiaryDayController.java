@@ -1,6 +1,7 @@
 package com.ciepiela.adrian.controllers;
 
 import com.ciepiela.adrian.dao.DiaryDayRepository;
+import com.ciepiela.adrian.dao.ProductRepository;
 import com.ciepiela.adrian.exceptions.DiaryDayNotFoundException;
 import com.ciepiela.adrian.model.DiaryDay;
 import org.slf4j.Logger;
@@ -21,14 +22,17 @@ public class DiaryDayController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(DiaryDayController.class);
     private final DiaryDayRepository diaryDayRepository;
+    private final ProductRepository  productRepository;
 
     @Autowired
-    public DiaryDayController(DiaryDayRepository diaryDayRepository) {
+    public DiaryDayController(DiaryDayRepository diaryDayRepository, ProductRepository productRepository) {
         this.diaryDayRepository = diaryDayRepository;
+        this.productRepository = productRepository;
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseEntity<DiaryDay> create(@RequestBody DiaryDay diaryDay) {
+        productRepository.save(diaryDay.getProducts());
         DiaryDay savedDiaryDay = diaryDayRepository.save(diaryDay);
         LOGGER.info("Create diaryDay with id: {}", diaryDay.getDiaryDayId());
         return new ResponseEntity<>(savedDiaryDay, HttpStatus.OK);
@@ -47,6 +51,7 @@ public class DiaryDayController {
         findIfDiaryDayExist(diaryDayId);
         DiaryDay exisitingDiaryDay = diaryDayRepository.getOne(diaryDayId);
         exisitingDiaryDay.setProducts(updatedDiaryDay.getProducts());
+        productRepository.save(exisitingDiaryDay.getProducts());
         DiaryDay savedDiaryDay = diaryDayRepository.save(exisitingDiaryDay);
         LOGGER.info("Update diaryDay with id: {}", diaryDayId);
         return new ResponseEntity<>(savedDiaryDay, HttpStatus.OK);

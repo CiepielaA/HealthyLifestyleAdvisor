@@ -6,6 +6,7 @@ import com.ciepiela.adrian.dao.ProductRepository;
 import com.ciepiela.adrian.dao.UserRepository;
 import com.ciepiela.adrian.model.DiaryDay;
 import com.ciepiela.adrian.model.Product;
+import com.ciepiela.adrian.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -141,7 +142,6 @@ public class DiaryDayControllerTest {
 //                .andExpect(MockMvcResultMatchers.jsonPath("$.diaryDayId", Matchers.is(DIARY_DAY_ID)));
 //                .andExpect(MockMvcResultMatchers.jsonPath("$.date", Matchers.is(diaryDay.getDate())))
 //                .andExpect(MockMvcResultMatchers.jsonPath("$.products[0]", Matchers.is(diaryDay.getProducts().get(0))));
-
     }
 
     @Test
@@ -188,21 +188,21 @@ public class DiaryDayControllerTest {
 //                .andExpect(MockMvcResultMatchers.jsonPath("$.products[0]", Matchers.is(diaryDay.getProducts().get(0))));
     }
 
-//    @Test
-//    public void findByDateAndUserId() throws Exception {
-//        User user = new User("login", "password", "email");
-//        diaryDay.setUser(user);
-//        userRepository.save(user);
-//        diaryDayRepository.save(diaryDay);
-//
-//        mockMvc.perform(MockMvcRequestBuilders
-//                .get("/diaryDay/findByDateAndUserId" + "/" + diaryDay.getDiaryDayId() + "/" + diaryDay.getDate().toString()))
-//                .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andExpect(MockMvcResultMatchers.content().contentType(contentType))
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.diaryDayId", Matchers.is((int)diaryDay.getDiaryDayId())))
-////                .andExpect(MockMvcResultMatchers.jsonPath("$.date", Matchers.is(diaryDay.getDate())))
+    @Test
+    public void findByDateAndUserId() throws Exception {
+        User user = new User("login", "password", "email");
+        diaryDay.setUser(user);
+        userRepository.save(user);
+        diaryDayRepository.save(diaryDay);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                .get("/diaryDay/findByDateAndUserId" + "/" + diaryDay.getDate() + "/" + diaryDay.getDiaryDayId()))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(contentType))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.diaryDayId", Matchers.is((int)diaryDay.getDiaryDayId())));
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.date", Matchers.is(diaryDay.getDate())))
 //                .andExpect(MockMvcResultMatchers.jsonPath("$.user", Matchers.is(diaryDay.getUser())));
-//    }
+    }
 
     private String convertToJson(Object o) throws IOException {
         return objectMapper.writeValueAsString(o);
