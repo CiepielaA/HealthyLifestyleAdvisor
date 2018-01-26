@@ -26,6 +26,10 @@ public class User {
     @Column(name = "user_id")
     private List<DiaryDay> diaryDays;
 
+    @OneToMany
+    @Column(name = "user_id")
+    private List<Meal> meals;
+
     //for jpa only
     private User() {
         this.diaryDays = new ArrayList<>();
@@ -78,5 +82,23 @@ public class User {
         this.diaryDays.add(diaryDay);
     }
 
+    public List<Meal> getMeals() {
+        return meals;
+    }
+
+    public void setMeals(List<Meal> meals) {
+        this.meals = meals;
+    }
+
+    public void appendMeal(Meal meal) {
+        this.meals.add(meal);
+    }
+
+    public void removeMeal(Meal meal){
+        int index = this.meals.indexOf(meal);
+        if(index != -1){
+            this.meals.remove(index);
+        }
+    }
 
 }

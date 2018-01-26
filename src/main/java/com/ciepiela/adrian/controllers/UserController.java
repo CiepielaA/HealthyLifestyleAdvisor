@@ -50,6 +50,7 @@ public class UserController {
         existingUser.setLogin(updatedUser.getLogin());
         existingUser.setPassword(updatedUser.getPassword());
         existingUser.setDiaryDays(updatedUser.getDiaryDays());
+        existingUser.setMeals(updatedUser.getMeals());
         User savedUser = userRepository.save(existingUser);
         LOGGER.info("Update user with id {}", userId);
         return new ResponseEntity<>(savedUser, HttpStatus.OK);
