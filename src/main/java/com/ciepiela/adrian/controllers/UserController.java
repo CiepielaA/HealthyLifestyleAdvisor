@@ -13,7 +13,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.Optional;
 
-
 @RestController
 @RequestMapping(value = "/user")
 @EnableWebMvc
@@ -28,10 +27,14 @@ public class UserController {
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public ResponseEntity<User> create(@RequestBody User user) {
-        User savedUser = userRepository.save(user);
-        LOGGER.info("Create user with login: {} and e-mail: {}", user.getLogin(), user.getEmail());
-        return new ResponseEntity<>(savedUser, HttpStatus.OK);
+    public  ResponseEntity create(@RequestBody User user) {
+        if (!findIfUserExist(user.getEmail())) {
+            User savedUser = userRepository.save(user);
+            LOGGER.info("Create user with login: {} and e-mail: {}", user.getLogin(), user.getEmail());
+            return new ResponseEntity<>(savedUser, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(user, HttpStatus.FOUND);
+        }
     }
 
     @RequestMapping(value = "/delete/{userId}", method = RequestMethod.GET)
@@ -82,4 +85,8 @@ public class UserController {
         userRepository.findByUserId(userId).orElseThrow(() -> new UserNotFoundException(userId));
     }
 
+    private boolean findIfUserExist(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        return user.isPresent();
+    }
 }
