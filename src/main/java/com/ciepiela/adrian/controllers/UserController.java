@@ -59,14 +59,14 @@ public class UserController {
         return new ResponseEntity<>(savedUser, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/findByEmail/{email}", method = RequestMethod.GET)
+    @RequestMapping(value = "/findByEmail/{email:.+}", method = RequestMethod.GET)
     public ResponseEntity<User> findByEmail(@PathVariable String email) {
         Optional<User> user = userRepository.findByEmail(email);
         if (user.isPresent()) {
             LOGGER.info("Found user with email: {} ", email);
             return new ResponseEntity<>(user.get(), HttpStatus.OK);
         } else {
-            throw new UserNotFoundException(email);
+            return new ResponseEntity<>(HttpStatus.FOUND);
         }
     }
 
