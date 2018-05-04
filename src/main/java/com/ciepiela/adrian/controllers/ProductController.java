@@ -48,8 +48,8 @@ public class ProductController {
         Product exisitingProduct = productRepository.getOne(productId);
         exisitingProduct.setDescription(updatedProduct.getDescription());
         exisitingProduct.setKcal(updatedProduct.getKcal());
-        exisitingProduct.setProtein(updatedProduct.getProtein());
-        exisitingProduct.setFat(updatedProduct.getFat());
+        exisitingProduct.setProteins(updatedProduct.getProteins());
+        exisitingProduct.setFats(updatedProduct.getFats());
         exisitingProduct.setCarbs(updatedProduct.getCarbs());
         exisitingProduct.setAlcohol(updatedProduct.getAlcohol());
         Product savedProduct = productRepository.save(exisitingProduct);

@@ -30,9 +30,13 @@ public class User {
     @Column(name = "user_id")
     private List<Meal> meals;
 
+    @Embedded
+    private Goals goals;
+
     //for jpa only
     private User() {
         this.diaryDays = new ArrayList<>();
+        this.meals = new ArrayList<>();
     }
 
     public User(String login, String password, String email) {
@@ -40,6 +44,7 @@ public class User {
         this.password = password;
         this.email = email;
         this.diaryDays = new ArrayList<>();
+        this.meals = new ArrayList<>();
     }
 
     public long getUserId() {
@@ -101,4 +106,11 @@ public class User {
         }
     }
 
+//    public Goals getGoals() {
+//        return goals;
+//    }
+//
+//    public void setGoals(Goals goals) {
+//        this.goals = goals;
+//    }
 }

@@ -138,8 +138,8 @@ public class ProductControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType(contentType))
 //                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(product.getId())))     // o chuj chodzi??????
                 .andExpect(MockMvcResultMatchers.jsonPath("$.description", Matchers.is(updatedProduct.getDescription())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.protein", Matchers.is(updatedProduct.getProtein())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.fat", Matchers.is(updatedProduct.getFat())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.protein", Matchers.is(updatedProduct.getProteins())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.fat", Matchers.is(updatedProduct.getFats())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.carbs", Matchers.is(updatedProduct.getCarbs())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.alcohol", Matchers.is(updatedProduct.getAlcohol())));
     }
@@ -161,8 +161,8 @@ public class ProductControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType(contentType))
 //                .andExpect(MockMvcResultMatchers.jsonPath("$.productId", Matchers.is(product.getId())))     // o chuj chodzi??????
                 .andExpect(MockMvcResultMatchers.jsonPath("$.description", Matchers.is(product.getDescription())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.protein", Matchers.is(product.getProtein())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.fat", Matchers.is(product.getFat())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.protein", Matchers.is(product.getProteins())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.fat", Matchers.is(product.getFats())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.carbs", Matchers.is(product.getCarbs())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.alcohol", Matchers.is(product.getAlcohol())));
     }
@@ -182,8 +182,8 @@ public class ProductControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType(contentType))
 //                .andExpect(MockMvcResultMatchers.jsonPath("$.productId", Matchers.is(product.getId())))     // o chuj chodzi??????
                 .andExpect(MockMvcResultMatchers.jsonPath("$.description", Matchers.is(product.getDescription())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.protein", Matchers.is(product.getProtein())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.fat", Matchers.is(product.getFat())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.protein", Matchers.is(product.getProteins())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.fat", Matchers.is(product.getFats())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.carbs", Matchers.is(product.getCarbs())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.alcohol", Matchers.is(product.getAlcohol())));
     }

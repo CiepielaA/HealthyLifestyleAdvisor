@@ -64,19 +64,19 @@ public class FrontEndProduct {
     }
 
     public int getProtein() {
-        return this.product.getProtein();
+        return this.product.getProteins();
     }
 
     public void setProtein(int protein) {
-        this.product.setProtein(protein);
+        this.product.setProteins(protein);
     }
 
     public int getFat() {
-        return this.product.getFat();
+        return this.product.getFats();
     }
 
     public void setFat(int fat) {
-        this.product.setFat(fat);
+        this.product.setFats(fat);
     }
 
     public int getCarbs() {

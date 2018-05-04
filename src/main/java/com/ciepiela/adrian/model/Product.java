@@ -13,8 +13,8 @@ public class Product {
     @Column(nullable = false)
     private String description;
     private int kcal;
-    private int protein;
-    private int fat;
+    private int proteins;
+    private int fats;
     private int carbs;
     private int alcohol;
 
@@ -26,19 +26,19 @@ public class Product {
         this(description, kcal, 0, 0, 0, 0);
     }
 
-    public Product(String description, int protein, int fat, int carbs) {
-        this(description, protein, fat, carbs, 0);
+    public Product(String description, int proteins, int fats, int carbs) {
+        this(description, proteins, fats, carbs, 0);
     }
 
-    public Product(String description, int protein, int fat, int carbs, int alcohol) {
-        this(description, 4*protein + 9*fat + 4*carbs + 7*alcohol, protein, fat, carbs, alcohol);
+    public Product(String description, int proteins, int fats, int carbs, int alcohol) {
+        this(description, 4* proteins + 9* fats + 4*carbs + 7*alcohol, proteins, fats, carbs, alcohol);
     }
 
-    private Product(String description, int kcal, int protein, int fat, int carbs, int alcohol) {
+    private Product(String description, int kcal, int proteins, int fat, int carbs, int alcohol) {
         this.description = description;
         this.kcal = kcal;
-        this.protein = protein;
-        this.fat = fat;
+        this.proteins = proteins;
+        this.fats = fat;
         this.carbs = carbs;
         this.alcohol = alcohol;
     }
@@ -63,20 +63,20 @@ public class Product {
         this.kcal = kcal;
     }
 
-    public int getProtein() {
-        return protein;
+    public int getProteins() {
+        return proteins;
     }
 
-    public void setProtein(int protein) {
-        this.protein = protein;
+    public void setProteins(int proteins) {
+        this.proteins = proteins;
     }
 
-    public int getFat() {
-        return fat;
+    public int getFats() {
+        return fats;
     }
 
-    public void setFat(int fat) {
-        this.fat = fat;
+    public void setFats(int fats) {
+        this.fats = fats;
     }
 
     public int getCarbs() {
@@ -100,8 +100,8 @@ public class Product {
         return "{" +
                 "description=" + description +
                 ", kcal=" + kcal +
-                ", protein=" + protein +
-                ", fat=" + fat +
+                ", proteins=" + proteins +
+                ", fats=" + fats +
                 ", carbs=" + carbs +
                 ", alcohol=" + alcohol +
                 ", id=" + productId +
