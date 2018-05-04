@@ -32,7 +32,7 @@ public class DiaryDayController {
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseEntity<DiaryDay> create(@RequestBody DiaryDay diaryDay) {
-        productRepository.save(diaryDay.getProducts());
+//        productRepository.save(diaryDay.getFrontEndProducts());
         DiaryDay savedDiaryDay = diaryDayRepository.save(diaryDay);
         LOGGER.info("Create diaryDay with id: {}", diaryDay.getDiaryDayId());
         return new ResponseEntity<>(savedDiaryDay, HttpStatus.OK);
@@ -50,8 +50,8 @@ public class DiaryDayController {
     public ResponseEntity<DiaryDay> update(@RequestBody DiaryDay updatedDiaryDay, @PathVariable long diaryDayId) {
         findIfDiaryDayExist(diaryDayId);
         DiaryDay exisitingDiaryDay = diaryDayRepository.getOne(diaryDayId);
-        exisitingDiaryDay.setProducts(updatedDiaryDay.getProducts());
-        productRepository.save(exisitingDiaryDay.getProducts());
+        exisitingDiaryDay.setFrontEndProducts(updatedDiaryDay.getFrontEndProducts());
+//        productRepository.save(exisitingDiaryDay.getFrontEndProducts());
         DiaryDay savedDiaryDay = diaryDayRepository.save(exisitingDiaryDay);
         LOGGER.info("Update diaryDay with id: {}", diaryDayId);
         return new ResponseEntity<>(savedDiaryDay, HttpStatus.OK);

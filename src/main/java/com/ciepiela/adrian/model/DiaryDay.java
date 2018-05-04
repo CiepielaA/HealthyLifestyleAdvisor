@@ -20,7 +20,7 @@ public class DiaryDay {
 
     @OneToMany
     @Column(name = "diary_day_id")
-    private List<Product> products = new ArrayList<>();
+    private List<FrontEndProduct> frontEndProducts = new ArrayList<>();
 
     @JsonIgnore
     @ManyToOne
@@ -43,27 +43,27 @@ public class DiaryDay {
         this.date = date;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public List<FrontEndProduct> getFrontEndProducts() {
+        return frontEndProducts;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public void setFrontEndProducts(List<FrontEndProduct> frontEndProducts) {
+        this.frontEndProducts = frontEndProducts;
     }
 
-    public void appendProduct(Product product) {
-        this.getProducts().add(product);
+    public void appendProduct(FrontEndProduct product) {
+        this.getFrontEndProducts().add(product);
     }
 
-    public void removeProduct(Product product) {
-        this.getProducts().remove(product);
+    public void removeProduct(FrontEndProduct product) {
+        this.getFrontEndProducts().remove(product);
     }
 
-    public void updateProduct(Product oldProduct, Product newProduct){
-        int index = this.products.indexOf(oldProduct);
+    public void updateProduct(FrontEndProduct oldProduct, FrontEndProduct newProduct){
+        int index = this.frontEndProducts.indexOf(oldProduct);
         if(index != -1){
-            this.products.remove(index);
-            this.products.add(newProduct);
+            this.frontEndProducts.remove(index);
+            this.frontEndProducts.add(newProduct);
         }
     }
 
@@ -80,7 +80,7 @@ public class DiaryDay {
         return "{" +
                 "diaryDayId=" + diaryDayId +
                 ", date=" + date +
-                ", products=" + products +
+                ", frontEndProducts=" + frontEndProducts +
                 ", user=" + user +
                 '}';
     }
