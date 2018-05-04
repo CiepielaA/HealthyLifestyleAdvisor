@@ -31,7 +31,7 @@ public class Product {
     }
 
     public Product(String description, int protein, int fat, int carbs, int alcohol) {
-        this(description, 4*protein + 9*fat + 4*carbs, protein, fat, carbs, alcohol);
+        this(description, 4*protein + 9*fat + 4*carbs + 7*alcohol, protein, fat, carbs, alcohol);
     }
 
     private Product(String description, int kcal, int protein, int fat, int carbs, int alcohol) {
