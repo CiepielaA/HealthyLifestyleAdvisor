@@ -88,8 +88,8 @@ public class ProductControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(contentType))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.description", Matchers.is(DESCRIPTION)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.protein", Matchers.is(PROTEIN)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.fat", Matchers.is(FAT)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.proteins", Matchers.is(PROTEIN)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.fats", Matchers.is(FAT)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.carbs", Matchers.is(CARBS)));
 
         this.product = new Product(DESCRIPTION, PROTEIN, FAT, CARBS, ALCOHOL);
@@ -99,8 +99,8 @@ public class ProductControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(contentType))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.description", Matchers.is(DESCRIPTION)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.protein", Matchers.is(PROTEIN)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.fat", Matchers.is(FAT)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.proteins", Matchers.is(PROTEIN)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.fats", Matchers.is(FAT)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.carbs", Matchers.is(CARBS)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.alcohol", Matchers.is(ALCOHOL)));
     }
@@ -116,13 +116,13 @@ public class ProductControllerTest {
     @Test
     public void delete() throws Exception {
         this.product = productRepository.save(new Product(DESCRIPTION, KCAL));
-        mockMvc.perform(MockMvcRequestBuilders.get("/product/delete" + "/" + product.getId()))
+        mockMvc.perform(MockMvcRequestBuilders.get("/product/deleteById" + "/" + product.getId()))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
     public void NotFoundStatusWhenTryingToDeleteNonExistingProduct() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/product/delete" + "/" + NO_EXISTING_PRODUCT_ID))
+        mockMvc.perform(MockMvcRequestBuilders.get("/product/deleteById" + "/" + NO_EXISTING_PRODUCT_ID))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
@@ -161,8 +161,8 @@ public class ProductControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType(contentType))
 //                .andExpect(MockMvcResultMatchers.jsonPath("$.productId", Matchers.is(product.getId())))     // o chuj chodzi??????
                 .andExpect(MockMvcResultMatchers.jsonPath("$.description", Matchers.is(product.getDescription())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.protein", Matchers.is(product.getProteins())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.fat", Matchers.is(product.getFats())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.proteins", Matchers.is(product.getProteins())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.fats", Matchers.is(product.getFats())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.carbs", Matchers.is(product.getCarbs())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.alcohol", Matchers.is(product.getAlcohol())));
     }
@@ -182,8 +182,8 @@ public class ProductControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType(contentType))
 //                .andExpect(MockMvcResultMatchers.jsonPath("$.productId", Matchers.is(product.getId())))     // o chuj chodzi??????
                 .andExpect(MockMvcResultMatchers.jsonPath("$.description", Matchers.is(product.getDescription())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.protein", Matchers.is(product.getProteins())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.fat", Matchers.is(product.getFats())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.proteins", Matchers.is(product.getProteins())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.fats", Matchers.is(product.getFats())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.carbs", Matchers.is(product.getCarbs())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.alcohol", Matchers.is(product.getAlcohol())));
     }

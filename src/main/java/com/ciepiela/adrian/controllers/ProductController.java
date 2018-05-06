@@ -34,26 +34,33 @@ public class ProductController {
         return new ResponseEntity<>(savedProduct, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/delete/{productId}", method = RequestMethod.GET)
-    public ResponseEntity delete(@PathVariable long productId) {
+    @RequestMapping(value = "/deleteById/{productId}", method = RequestMethod.GET)
+    public ResponseEntity deleteById(@PathVariable long productId) {
         findIfProductExist(productId);
         productRepository.delete(productId);
         LOGGER.info("Delete product with id {}", productId);
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/update/{productId}", method = RequestMethod.POST)
-    public ResponseEntity<Product> update(@RequestBody Product updatedProduct, @PathVariable long productId) {
-        findIfProductExist(productId);
-        Product exisitingProduct = productRepository.getOne(productId);
-        exisitingProduct.setDescription(updatedProduct.getDescription());
-        exisitingProduct.setKcal(updatedProduct.getKcal());
-        exisitingProduct.setProteins(updatedProduct.getProteins());
-        exisitingProduct.setFats(updatedProduct.getFats());
-        exisitingProduct.setCarbs(updatedProduct.getCarbs());
-        exisitingProduct.setAlcohol(updatedProduct.getAlcohol());
-        Product savedProduct = productRepository.save(exisitingProduct);
-        LOGGER.info("Update product with id: {} and description: {}", exisitingProduct.getId(), exisitingProduct.getDescription());
+    @RequestMapping(value = "/deleteByDescription/{description}", method = RequestMethod.GET)
+    public ResponseEntity deleteByDescription(@PathVariable String description) {
+        Product existingProduct = findIfProductExist(description);
+        productRepository.delete(existingProduct.getId());
+        LOGGER.info("Delete product with id {}", existingProduct.getId());
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public ResponseEntity<Product> update(@RequestBody Product updatedProduct) {
+        Product existingProduct = findIfProductExist(updatedProduct.getDescription());
+        existingProduct.setDescription(updatedProduct.getDescription());
+        existingProduct.setKcal(updatedProduct.getKcal());
+        existingProduct.setProteins(updatedProduct.getProteins());
+        existingProduct.setFats(updatedProduct.getFats());
+        existingProduct.setCarbs(updatedProduct.getCarbs());
+        existingProduct.setAlcohol(updatedProduct.getAlcohol());
+        Product savedProduct = productRepository.save(existingProduct);
+        LOGGER.info("Update product with id: {} and description: {}", existingProduct.getId(), existingProduct.getDescription());
         return new ResponseEntity<>(savedProduct, HttpStatus.OK);
     }
 
@@ -82,4 +89,11 @@ public class ProductController {
     private void findIfProductExist(long productId) {
         productRepository.findByProductId(productId).orElseThrow(() -> new ProductNotFoundException(productId));
     }
+
+    private Product findIfProductExist(String description) {
+        return productRepository.findByDescription(description)
+            .orElseThrow(() -> new ProductNotFoundException(description));
+    }
+
+
 }
