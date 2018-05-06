@@ -4,6 +4,7 @@ package com.ciepiela.adrian.controllers;
 import com.ciepiela.adrian.dao.ProductRepository;
 import com.ciepiela.adrian.exceptions.ProductNotFoundException;
 import com.ciepiela.adrian.model.Product;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,6 +82,16 @@ public class ProductController {
         if (product.isPresent()) {
             LOGGER.info("Found product with description: {} ", description);
             return new ResponseEntity<>(product.get(), HttpStatus.OK);
+        } else {
+            throw new ProductNotFoundException(description);
+        }
+    }
+    @RequestMapping(value = "/findByDescriptionContaining/{description}", method = RequestMethod.GET)
+    public ResponseEntity<List<Product>> findByDescriptionContaining(@PathVariable String description) {
+        List<Product> products = productRepository.findByDescriptionContaining(description);
+        if (!products.isEmpty()) {
+            LOGGER.info("Found {} products with description: {} ", products.size(), description);
+            return new ResponseEntity<>(products, HttpStatus.OK);
         } else {
             throw new ProductNotFoundException(description);
         }
