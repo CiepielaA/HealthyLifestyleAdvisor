@@ -93,7 +93,9 @@ public class ProductController {
             LOGGER.info("Found {} products with description: {} ", products.size(), description);
             return new ResponseEntity<>(products, HttpStatus.OK);
         } else {
-            throw new ProductNotFoundException(description);
+//            throw new ProductNotFoundException(description);
+            return new ResponseEntity<>(HttpStatus.OK);
+
         }
     }
 
