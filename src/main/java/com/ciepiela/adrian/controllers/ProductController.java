@@ -3,7 +3,9 @@ package com.ciepiela.adrian.controllers;
 
 import com.ciepiela.adrian.dao.ProductRepository;
 import com.ciepiela.adrian.exceptions.ProductNotFoundException;
+import com.ciepiela.adrian.model.FrontEndProduct;
 import com.ciepiela.adrian.model.Product;
+import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,14 +88,32 @@ public class ProductController {
             throw new ProductNotFoundException(description);
         }
     }
+
+//    @RequestMapping(value = "/findByDescriptionContaining/{description}", method = RequestMethod.GET)
+//    public ResponseEntity<List<Product>> findByDescriptionContaining(@PathVariable String description) {
+//        List<Product> products = productRepository.findByDescriptionContaining(description);
+//        if (!products.isEmpty()) {
+//            LOGGER.info("Found {} products with description: {} ", products.size(), description);
+//            return new ResponseEntity<>(products, HttpStatus.OK);
+//        } else {
+////            throw new ProductNotFoundException(description);
+//            return new ResponseEntity<>(HttpStatus.OK);
+//
+//        }
+//    }
+
     @RequestMapping(value = "/findByDescriptionContaining/{description}", method = RequestMethod.GET)
-    public ResponseEntity<List<Product>> findByDescriptionContaining(@PathVariable String description) {
+    public ResponseEntity<List<FrontEndProduct>> findByDescriptionContaining(@PathVariable String description) {
         List<Product> products = productRepository.findByDescriptionContaining(description);
+        List<FrontEndProduct> frontEndProducts = new ArrayList<>();
+        for(Product product : products){
+            frontEndProducts.add(new FrontEndProduct(product, 1));
+        }
         if (!products.isEmpty()) {
             LOGGER.info("Found {} products with description: {} ", products.size(), description);
-            return new ResponseEntity<>(products, HttpStatus.OK);
+            return new ResponseEntity<>(frontEndProducts, HttpStatus.OK);
         } else {
-//            throw new ProductNotFoundException(description);
+            //            throw new ProductNotFoundException(description);
             return new ResponseEntity<>(HttpStatus.OK);
 
         }
