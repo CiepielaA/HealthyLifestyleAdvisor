@@ -16,7 +16,7 @@ public class DiaryDay {
     private long diaryDayId;
 
     @Column(nullable = false)
-    private LocalDate date;
+    private String date;
 
     @OneToMany
     @Column(name = "diary_day_id")
@@ -28,18 +28,26 @@ public class DiaryDay {
     private User user;
 
     public DiaryDay() {
-        date = LocalDate.now();
+        date = LocalDate.now().toString();
     }
 
     public long getDiaryDayId() {
         return diaryDayId;
     }
 
-    public LocalDate getDate() {
+//    public LocalDate getDate() {
+//        return date;
+//    }
+//
+//    public void setDate(LocalDate date) {
+//        this.date = date;
+//    }
+
+    public String getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

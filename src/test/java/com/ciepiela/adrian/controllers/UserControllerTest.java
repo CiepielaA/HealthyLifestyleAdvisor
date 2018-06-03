@@ -99,7 +99,7 @@ public class UserControllerTest {
         DiaryDay diaryDay = new DiaryDay();
         DiaryDay diaryDay2 = new DiaryDay();
         diaryDayRepository.save(Arrays.asList(diaryDay, diaryDay2));
-        diaryDay2.setDate(LocalDate.of(1000, 10, 10));
+        diaryDay2.setDate(LocalDate.of(1000, 10, 10).toString());
         user.appendDiaryDay(diaryDay);
         user.appendDiaryDay(diaryDay2);
 
