@@ -75,22 +75,23 @@ public class UserControllerTest {
 
     @Test
     public void create() throws Exception {
+        User newUser = new User(USER_LOGIN, USER_PASSWORD, NO_EXISTING_USER_EMAIL);
         DiaryDay diaryDay = new DiaryDay();
         DiaryDay diaryDay2 = new DiaryDay();
 //        user.setDiaryDays(Collections.singletonList(diaryDay));
-        user.setDiaryDays(Arrays.asList(diaryDay, diaryDay2));
+        newUser.setDiaryDays(Arrays.asList(diaryDay, diaryDay2));
         diaryDayRepository.save(diaryDay);
         diaryDayRepository.save(diaryDay2);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/user/create")
-                .content(convertToJson(user))
+                .content(convertToJson(newUser))
                 .contentType(contentType))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(contentType))
 //                .andExpect(MockMvcResultMatchers.jsonPath("$.userId", Matchers.is(userId)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.login", Matchers.is(USER_LOGIN)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.password", Matchers.is(USER_PASSWORD)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.email", Matchers.is(USER_EMAIL)));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.email", Matchers.is(NO_EXISTING_USER_EMAIL)));
     }
 
 
@@ -103,7 +104,7 @@ public class UserControllerTest {
         user.appendDiaryDay(diaryDay);
         user.appendDiaryDay(diaryDay2);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/user/update" + "/" + user.getUserId())
+        mockMvc.perform(MockMvcRequestBuilders.post("/user/updateById" + "/" + user.getUserId())
                 .content(convertToJson(user))
                 .contentType(contentType))
 //                .andExpect(MockMvcResultMatchers.status().isOk())
@@ -140,7 +141,7 @@ public class UserControllerTest {
     public void update() throws Exception {
         User updatedUser = new User("updated login", "updated password", "updated email");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/user/update" + "/" + user.getUserId())
+        mockMvc.perform(MockMvcRequestBuilders.post("/user/updateById" + "/" + user.getUserId())
                 .content(convertToJson(updatedUser))
                 .contentType(contentType))
 //                .andExpect(MockMvcResultMatchers.status().isOk())
@@ -153,7 +154,7 @@ public class UserControllerTest {
 
     @Test
     public void NotFoundStatusWhenTryingToUpdateNonExistingUser() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/user/update" + "/" + noExistingUserId)
+        mockMvc.perform(MockMvcRequestBuilders.post("/user/updateById" + "/" + noExistingUserId)
                 .content(convertToJson(user))
                 .contentType(contentType))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());

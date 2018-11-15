@@ -45,7 +45,7 @@ public class UserController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/update/{userId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/updateById/{userId}", method = RequestMethod.POST)
     public ResponseEntity<User> update(@RequestBody User updatedUser, @PathVariable long userId) {
         findIfUserExist(userId);
         User existingUser = userRepository.getOne(userId);
@@ -66,7 +66,7 @@ public class UserController {
             LOGGER.info("Found user with email: {} ", email);
             return new ResponseEntity<>(user.get(), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 

@@ -124,7 +124,7 @@ public class DiaryDayControllerTest {
         diaryDay.setFrontEndProducts(Collections.singletonList(frontEndProduct));
 
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/diaryDay/update" + "/" + diaryDay.getDiaryDayId())
+        mockMvc.perform(MockMvcRequestBuilders.post("/diaryDay/updateById" + "/" + diaryDay.getDiaryDayId())
                 .content(convertToJson(diaryDay))
                 .contentType(contentType))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -144,7 +144,7 @@ public class DiaryDayControllerTest {
 
         this.diaryDay.appendProduct(frontEndProduct);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/diaryDay/update" + "/" + diaryDay.getDiaryDayId())
+        mockMvc.perform(MockMvcRequestBuilders.post("/diaryDay/updateById" + "/" + diaryDay.getDiaryDayId())
                 .content(convertToJson(diaryDay))
                 .contentType(contentType))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -182,7 +182,7 @@ public class DiaryDayControllerTest {
 
     @Test
     public void NotFoundStatusWhenTryingToUpdateNonExistingUser() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/diaryDay/update" + "/" + noExistingDiaryDayId)
+        mockMvc.perform(MockMvcRequestBuilders.post("/diaryDay/updateById" + "/" + noExistingDiaryDayId)
                 .content(convertToJson(diaryDay))
                 .contentType(contentType))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());

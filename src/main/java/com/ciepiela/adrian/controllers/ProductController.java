@@ -53,9 +53,9 @@ public class ProductController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResponseEntity<Product> update(@RequestBody Product updatedProduct) {
-        Product existingProduct = findIfProductExist(updatedProduct.getDescription());
+    @RequestMapping(value = "/updateById/{productId}", method = RequestMethod.POST)
+    public ResponseEntity<Product> updateById(@RequestBody Product updatedProduct, @PathVariable long productId) {
+        Product existingProduct = findIfProductExist(productId);
         existingProduct.setDescription(updatedProduct.getDescription());
         existingProduct.setKcal(updatedProduct.getKcal());
         existingProduct.setProteins(updatedProduct.getProteins());
@@ -119,13 +119,14 @@ public class ProductController {
         }
     }
 
-    private void findIfProductExist(long productId) {
-        productRepository.findByProductId(productId).orElseThrow(() -> new ProductNotFoundException(productId));
+    private Product findIfProductExist(long productId) {
+        return productRepository.findByProductId(productId)
+                .orElseThrow(() -> new ProductNotFoundException(productId));
     }
 
     private Product findIfProductExist(String description) {
         return productRepository.findByDescription(description)
-            .orElseThrow(() -> new ProductNotFoundException(description));
+                .orElseThrow(() -> new ProductNotFoundException(description));
     }
 
 

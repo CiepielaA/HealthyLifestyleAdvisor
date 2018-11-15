@@ -15,7 +15,7 @@ public class DiaryDayNotFoundException extends RuntimeException {
         LOGGER.warn("Could not find diaryDay with id: {}", diaryDayId);
     }
 
-    public DiaryDayNotFoundException(LocalDate date, long userId) {
+    public DiaryDayNotFoundException(String date, long userId) {
         LOGGER.warn("Could not find diaryDay with date: {} and userId: {}", date, userId);
     }
 

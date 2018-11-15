@@ -46,7 +46,7 @@ public class DiaryDayController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/update/{diaryDayId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/updateById/{diaryDayId}", method = RequestMethod.POST)
     public ResponseEntity<DiaryDay> update(@RequestBody DiaryDay updatedDiaryDay, @PathVariable long diaryDayId) {
         findIfDiaryDayExist(diaryDayId);
         DiaryDay exisitingDiaryDay = diaryDayRepository.getOne(diaryDayId);
@@ -70,13 +70,13 @@ public class DiaryDayController {
 
     @RequestMapping(value = "/findByDateAndUserId/{date}/{userId}", method = RequestMethod.GET)
     public ResponseEntity<DiaryDay> findByDateAndUserId(@PathVariable String date, @PathVariable long userId) {
-        LocalDate formattedDate = LocalDate.parse(date);
-        Optional<DiaryDay> diaryDay = diaryDayRepository.findByDateAndUser_UserId(formattedDate, userId);
+//        LocalDate formattedDate = LocalDate.parse(date);
+        Optional<DiaryDay> diaryDay = diaryDayRepository.findByDateAndUser_UserId(date, userId);
         if (diaryDay.isPresent()) {
             LOGGER.info("Found diaryDay with id: {} ", diaryDay.get().getDiaryDayId());
             return new ResponseEntity<>(diaryDay.get(), HttpStatus.OK);
         } else {
-            throw new DiaryDayNotFoundException(formattedDate, userId);
+            throw new DiaryDayNotFoundException(date, userId);
         }
     }
 

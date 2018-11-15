@@ -39,7 +39,6 @@ public class ProductControllerTest {
     private static final int FAT = 20;
     private static final int CARBS = 30;
     private static final int ALCOHOL = 40;
-    private static final int PRODUCT_ID = 1;
     private static final int NO_EXISTING_PRODUCT_ID = 0;
     private static final String INVALID_JSON_PRODUCT = "xxx";
     private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
@@ -131,15 +130,15 @@ public class ProductControllerTest {
         this.product = productRepository.save(new Product(DESCRIPTION, PROTEIN, FAT, CARBS, ALCOHOL));
         Product updatedProduct = new Product("updated description", 111, 222, 333,444);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/product/update" + "/" + product.getId())
+        mockMvc.perform(MockMvcRequestBuilders.post("/product/updateById" + "/" + product.getId())
                 .content(convertToJson(updatedProduct))
                 .contentType(contentType))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(contentType))
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(product.getId())))     // o chuj chodzi??????
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is((int)product.getId())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.description", Matchers.is(updatedProduct.getDescription())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.protein", Matchers.is(updatedProduct.getProteins())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.fat", Matchers.is(updatedProduct.getFats())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.proteins", Matchers.is(updatedProduct.getProteins())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.fats", Matchers.is(updatedProduct.getFats())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.carbs", Matchers.is(updatedProduct.getCarbs())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.alcohol", Matchers.is(updatedProduct.getAlcohol())));
     }
@@ -147,7 +146,7 @@ public class ProductControllerTest {
     @Test
     public void NotFoundStatusWhenTryingToUpdateNonExistingProduct() throws Exception {
         this.product = new Product(DESCRIPTION, KCAL);
-        mockMvc.perform(MockMvcRequestBuilders.post("/product/update" + "/" + NO_EXISTING_PRODUCT_ID)
+        mockMvc.perform(MockMvcRequestBuilders.post("/product/updateById" + "/" + NO_EXISTING_PRODUCT_ID)
                 .content(convertToJson(product))
                 .contentType(contentType))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
@@ -159,7 +158,7 @@ public class ProductControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/product/findById" + "/" + product.getId()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(contentType))
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.productId", Matchers.is(product.getId())))     // o chuj chodzi??????
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is((int) product.getId())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.description", Matchers.is(product.getDescription())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.proteins", Matchers.is(product.getProteins())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.fats", Matchers.is(product.getFats())))
@@ -180,7 +179,7 @@ public class ProductControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/product/findByDescription" + "/" + product.getDescription()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(contentType))
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.productId", Matchers.is(product.getId())))     // o chuj chodzi??????
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is((int) product.getId())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.description", Matchers.is(product.getDescription())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.proteins", Matchers.is(product.getProteins())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.fats", Matchers.is(product.getFats())))
