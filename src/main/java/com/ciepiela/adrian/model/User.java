@@ -106,11 +106,11 @@ public class User {
         }
     }
 
-//    public Goals getGoals() {
-//        return goals;
-//    }
-//
-//    public void setGoals(Goals goals) {
-//        this.goals = goals;
-//    }
+    public Goals getGoals() {
+        return goals;
+    }
+
+    public void setGoals(Goals goals) {
+        this.goals = goals;
+    }
 }
