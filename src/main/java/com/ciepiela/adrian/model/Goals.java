@@ -14,6 +14,9 @@ public class Goals {
     @Column(nullable = true)
     private int fats;
 
+    public Goals() {
+    }
+
     public Goals(int proteins, int carbs, int fats) {
         this.proteins = proteins;
         this.carbs = carbs;
