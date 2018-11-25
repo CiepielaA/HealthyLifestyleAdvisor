@@ -16,31 +16,35 @@ public class Product {
     private int proteins;
     private int fats;
     private int carbs;
-    private int alcohol;
 
     //for jpa only
-    private Product() {
+    public Product() {
+    }
+
+    public Product(Product product) {
+        this.description = product.getDescription();
+        this.kcal = product.getKcal();
+        this.proteins = product.getProteins();
+        this.fats = product.getFats();
+        this.carbs = product.getCarbs();
     }
 
     public Product(String description, int kcal) {
-        this(description, kcal, 0, 0, 0, 0);
+        this(description, kcal, 0, 0, 0);
     }
+
+
 
     public Product(String description, int proteins, int fats, int carbs) {
-        this(description, proteins, fats, carbs, 0);
+        this(description, 4* proteins + 9* fats + 4*carbs, proteins, fats, carbs);
     }
 
-    public Product(String description, int proteins, int fats, int carbs, int alcohol) {
-        this(description, 4* proteins + 9* fats + 4*carbs + 7*alcohol, proteins, fats, carbs, alcohol);
-    }
-
-    private Product(String description, int kcal, int proteins, int fat, int carbs, int alcohol) {
+    public Product(String description, int kcal, int proteins, int fat, int carbs) {
         this.description = description;
         this.kcal = kcal;
         this.proteins = proteins;
         this.fats = fat;
         this.carbs = carbs;
-        this.alcohol = alcohol;
     }
 
     public long getId() {
@@ -87,13 +91,6 @@ public class Product {
         this.carbs = carbs;
     }
 
-    public int getAlcohol() {
-        return alcohol;
-    }
-
-    public void setAlcohol(int alcohol) {
-        this.alcohol = alcohol;
-    }
 
     @Override
     public String toString() {
@@ -103,7 +100,6 @@ public class Product {
                 ", proteins=" + proteins +
                 ", fats=" + fats +
                 ", carbs=" + carbs +
-                ", alcohol=" + alcohol +
                 ", id=" + productId +
                 '}';
     }

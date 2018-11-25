@@ -61,7 +61,6 @@ public class ProductController {
         existingProduct.setProteins(updatedProduct.getProteins());
         existingProduct.setFats(updatedProduct.getFats());
         existingProduct.setCarbs(updatedProduct.getCarbs());
-        existingProduct.setAlcohol(updatedProduct.getAlcohol());
         Product savedProduct = productRepository.save(existingProduct);
         LOGGER.info("Update product with id: {} and description: {}", existingProduct.getId(), existingProduct.getDescription());
         return new ResponseEntity<>(savedProduct, HttpStatus.OK);
@@ -103,15 +102,15 @@ public class ProductController {
 //    }
 
     @RequestMapping(value = "/findByDescriptionContaining/{description}", method = RequestMethod.GET)
-    public ResponseEntity<List<FrontEndProduct>> findByDescriptionContaining(@PathVariable String description) {
+    public ResponseEntity<List<Product>> findByDescriptionContaining(@PathVariable String description) {
         List<Product> products = productRepository.findByDescriptionContaining(description);
-        List<FrontEndProduct> frontEndProducts = new ArrayList<>();
-        for(Product product : products){
-            frontEndProducts.add(new FrontEndProduct(product, 1));
-        }
+//        List<FrontEndProduct> frontEndProducts = new ArrayList<>();
+//        for(Product product : products){
+//            frontEndProducts.add(new FrontEndProduct(product, 1));
+//        }
         if (!products.isEmpty()) {
             LOGGER.info("Found {} products with description: {} ", products.size(), description);
-            return new ResponseEntity<>(frontEndProducts, HttpStatus.OK);
+            return new ResponseEntity<>(products, HttpStatus.OK);
         } else {
             //            throw new ProductNotFoundException(description);
             return new ResponseEntity<>(HttpStatus.OK);

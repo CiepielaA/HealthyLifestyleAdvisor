@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import static org.apache.commons.lang3.math.NumberUtils.isParsable;
+
 @Entity
 public class FrontEndProduct {
 
@@ -15,16 +17,19 @@ public class FrontEndProduct {
     @Column(name = "front_end_product_id")
     private long frontEndProductId;
     @OneToOne
+    private Product frontEndProduct;
+    @OneToOne
     private Product product;
-    private float weight;
+    private int weight;
+    private int kcal;
 
-    //for jpa only
-    private FrontEndProduct() {
+    public FrontEndProduct() {
     }
 
     public FrontEndProduct(Product product, int weight) {
         this.product = product;
         this.weight = weight;
+        this.frontEndProduct = product;
     }
 
     public long getFrontEndProductId() {
@@ -32,75 +37,38 @@ public class FrontEndProduct {
     }
 
     public Product getProduct() {
-        return product;
+        return frontEndProduct;
     }
 
     public void setProduct(Product product) {
-        this.product = product;
+        this.frontEndProduct = product;
     }
 
     public float getWeight() {
         return weight;
     }
 
-    public void setWeight(float weight) {
+    public void setWeight(int weight) {
         this.weight = weight;
     }
 
     public String getDescription() {
-        return this.product.getDescription();
-    }
-
-    public void setDescription(String description) {
-        this.product.setDescription(description);
+        return this.frontEndProduct.getDescription();
     }
 
     public int getKcal() {
-        return this.product.getKcal();
+        return kcal;
     }
 
-    public void setKcal(int kcal) {
-        this.product.setKcal(kcal);
+    public int getProteins() {
+        return this.frontEndProduct.getProteins();
     }
-
-    public int getProtein() {
-        return this.product.getProteins();
-    }
-
-    public void setProtein(int protein) {
-        this.product.setProteins(protein);
-    }
-
-    public int getFat() {
-        return this.product.getFats();
-    }
-
-    public void setFat(int fat) {
-        this.product.setFats(fat);
+    public int getFats() {
+        return this.frontEndProduct.getFats();
     }
 
     public int getCarbs() {
-        return this.product.getCarbs();
+        return this.frontEndProduct.getCarbs();
     }
 
-    public void setCarbs(int carbs) {
-        this.product.setCarbs(carbs);
-    }
-
-    public int getAlcohol() {
-        return this.product.getAlcohol();
-    }
-
-    public void setAlcohol(int alcohol) {
-        this.product.setAlcohol(alcohol);
-    }
-
-    @Override
-    public String toString() {
-        return "FrontEndProduct{" +
-            "frontEndProductId=" + frontEndProductId +
-            ", product=" + product +
-            ", weight=" + weight +
-            '}';
-    }
 }

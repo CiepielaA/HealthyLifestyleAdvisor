@@ -139,8 +139,7 @@ public class ProductControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.description", Matchers.is(updatedProduct.getDescription())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.proteins", Matchers.is(updatedProduct.getProteins())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.fats", Matchers.is(updatedProduct.getFats())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.carbs", Matchers.is(updatedProduct.getCarbs())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.alcohol", Matchers.is(updatedProduct.getAlcohol())));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.carbs", Matchers.is(updatedProduct.getCarbs())));
     }
 
     @Test
@@ -162,8 +161,7 @@ public class ProductControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.description", Matchers.is(product.getDescription())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.proteins", Matchers.is(product.getProteins())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.fats", Matchers.is(product.getFats())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.carbs", Matchers.is(product.getCarbs())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.alcohol", Matchers.is(product.getAlcohol())));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.carbs", Matchers.is(product.getCarbs())));
     }
 
     @Test
@@ -183,8 +181,7 @@ public class ProductControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.description", Matchers.is(product.getDescription())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.proteins", Matchers.is(product.getProteins())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.fats", Matchers.is(product.getFats())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.carbs", Matchers.is(product.getCarbs())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.alcohol", Matchers.is(product.getAlcohol())));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.carbs", Matchers.is(product.getCarbs())));
     }
 
     @Test

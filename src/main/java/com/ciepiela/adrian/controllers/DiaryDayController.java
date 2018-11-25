@@ -1,9 +1,12 @@
 package com.ciepiela.adrian.controllers;
 
 import com.ciepiela.adrian.dao.DiaryDayRepository;
+import com.ciepiela.adrian.dao.FrontEndProductRepository;
 import com.ciepiela.adrian.dao.ProductRepository;
+import com.ciepiela.adrian.dao.UserRepository;
 import com.ciepiela.adrian.exceptions.DiaryDayNotFoundException;
 import com.ciepiela.adrian.model.DiaryDay;
+import com.ciepiela.adrian.model.FrontEndProduct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -22,17 +26,27 @@ public class DiaryDayController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(DiaryDayController.class);
     private final DiaryDayRepository diaryDayRepository;
-    private final ProductRepository  productRepository;
+    private final ProductRepository productRepository;
+    private final FrontEndProductRepository frontEndProductRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public DiaryDayController(DiaryDayRepository diaryDayRepository, ProductRepository productRepository) {
+    public DiaryDayController(DiaryDayRepository diaryDayRepository, ProductRepository productRepository, FrontEndProductRepository frontEndProductRepository, UserRepository userRepository) {
         this.diaryDayRepository = diaryDayRepository;
         this.productRepository = productRepository;
+        this.frontEndProductRepository = frontEndProductRepository;
+        this.userRepository = userRepository;
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseEntity<DiaryDay> create(@RequestBody DiaryDay diaryDay) {
-//        productRepository.save(diaryDay.getFrontEndProducts());
+        List<FrontEndProduct> frontEndProducts = diaryDay.getFrontEndProducts();
+//        userRepository.save(diaryDay.getUser())
+        for (FrontEndProduct frontEndProduct : frontEndProducts){
+            productRepository.save(frontEndProduct.getProduct());
+            frontEndProductRepository.save(frontEndProduct);
+
+        }
         DiaryDay savedDiaryDay = diaryDayRepository.save(diaryDay);
         LOGGER.info("Create diaryDay with id: {}", diaryDay.getDiaryDayId());
         return new ResponseEntity<>(savedDiaryDay, HttpStatus.OK);
