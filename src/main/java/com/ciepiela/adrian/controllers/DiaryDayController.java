@@ -7,6 +7,8 @@ import com.ciepiela.adrian.dao.UserRepository;
 import com.ciepiela.adrian.exceptions.DiaryDayNotFoundException;
 import com.ciepiela.adrian.model.DiaryDay;
 import com.ciepiela.adrian.model.FrontEndProduct;
+import com.ciepiela.adrian.model.Product;
+import com.ciepiela.adrian.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,16 +42,35 @@ public class DiaryDayController {
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseEntity<DiaryDay> create(@RequestBody DiaryDay diaryDay) {
-        List<FrontEndProduct> frontEndProducts = diaryDay.getFrontEndProducts();
-//        userRepository.save(diaryDay.getUser())
-        for (FrontEndProduct frontEndProduct : frontEndProducts){
-            productRepository.save(frontEndProduct.getProduct());
-            frontEndProductRepository.save(frontEndProduct);
+        DiaryDay foundedDiaryDay = this.findByDateAndUserId(diaryDay.getDate(), diaryDay.getUser().getUserId()).getBody();
+        if(foundedDiaryDay == null){
+            List<FrontEndProduct> frontEndProducts = diaryDay.getFrontEndProducts();
+            userRepository.save(diaryDay.getUser());
+            for (FrontEndProduct frontEndProduct : frontEndProducts){
+                productRepository.save(frontEndProduct.getProduct());
+                frontEndProductRepository.save(frontEndProduct);
 
+            }
+            DiaryDay savedDiaryDay = diaryDayRepository.save(diaryDay);
+            LOGGER.info("Create diaryDay with id: {}", diaryDay.getDiaryDayId());
+            return new ResponseEntity<>(savedDiaryDay, HttpStatus.OK);
+        } else{
+            DiaryDay existingDiaryDay = diaryDayRepository.getOne(foundedDiaryDay.getDiaryDayId());
+            User existingUser = userRepository.getOne(existingDiaryDay.getUser().getUserId());
+            existingUser.setGoals(diaryDay.getUser().getGoals());
+            userRepository.save(existingUser);
+            List<FrontEndProduct> frontEndProducts = diaryDay.getFrontEndProducts();
+            for (FrontEndProduct frontEndProduct : frontEndProducts){
+                Product product = frontEndProduct.getProduct();
+                productRepository.save(product);
+            }
+            existingDiaryDay.setFrontEndProducts(frontEndProducts);
+            frontEndProductRepository.save(frontEndProducts);
+
+            DiaryDay savedDiaryDay = diaryDayRepository.save(existingDiaryDay);
+            LOGGER.info("Update diaryDay with id: {}", diaryDay.getDiaryDayId());
+            return new ResponseEntity<>(savedDiaryDay, HttpStatus.OK);
         }
-        DiaryDay savedDiaryDay = diaryDayRepository.save(diaryDay);
-        LOGGER.info("Create diaryDay with id: {}", diaryDay.getDiaryDayId());
-        return new ResponseEntity<>(savedDiaryDay, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/delete/{diaryDayId}", method = RequestMethod.GET)
@@ -90,7 +111,7 @@ public class DiaryDayController {
             LOGGER.info("Found diaryDay with id: {} ", diaryDay.get().getDiaryDayId());
             return new ResponseEntity<>(diaryDay.get(), HttpStatus.OK);
         } else {
-            throw new DiaryDayNotFoundException(date, userId);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
     }
 

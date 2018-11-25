@@ -22,7 +22,7 @@ public class DiaryDay {
     @Column(name = "diary_day_id")
     private List<FrontEndProduct> frontEndProducts = new ArrayList<>();
 
-    @JsonIgnore
+//    @JsonIgnore
     @ManyToOne
 //    @JoinColumn(name = "user_id", updatable = false)
     private User user;
